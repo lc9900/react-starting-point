@@ -4,13 +4,24 @@ const db = require('../db/models');
 const {Student} = db;
 module.exports = router;
 
-
-router.get('/', (req, res, next) => {
+// Retrieve all students info
+router.get('/', (req, res) => {
     return db.retrieveAllStudents()
             .then(result => {
                 res.json(result)
             })
             .catch(err => { throw err; });
+});
+
+// Expected req.body to be {name: xxxxxx, campusId: xx}
+// Add new student
+// Tested
+router.post('/', (req, res) => {
+    const {name, campusId} = req.body;
+    return Student.create({name, campusId})
+        .then(student => {
+        res.json(student);
+    }).catch(err => { throw err; });
 });
 
 // Update student info

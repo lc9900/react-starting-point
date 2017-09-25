@@ -36,17 +36,27 @@ router.post('/:campusId/:studentId', (req, res) => {
 });
 
 // Tested
+// Add new campus
 router.post('/', (req, res) => {
     // console.log(req.body.name);
     // res.json(req.body.name);
     return Campus.create(req.body)
             .then((campus) => {
-                res.json(`Campus ${req.body.name} is created`);
+                res.json(campus);
             })
             .catch(err => { throw err; });
 })
+
+// Tested
+router.get('/:campusId', (req, res) => {
+    return Campus.findById(req.params.campusId)
+                .then(campus => {
+                    return campus.getStudents();
+                }).then(students => {
+                    res.json(students);
+                }).catch(err => { throw err; });
+})
 ///////////////////////////////////////////////////////////////
-// Optional
 // Removing student from campus
 // Tested
 router.delete('/:campusId/:studentId', (req, res) => {
@@ -58,7 +68,6 @@ router.delete('/:campusId/:studentId', (req, res) => {
             .catch(err => { throw err; });
 });
 
-// Optional
 // Updating campus info
 // Tested
 router.put('/:campusId', (req, res) => {
