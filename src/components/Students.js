@@ -6,10 +6,9 @@ import store, { showAddStudentForm, getStudents, fetchStudents,
 export default class Students extends Component {
     constructor() {
         super();
-        this.state = Object.assign({}, store.getState(), { student: {}});
 
-        // This is a bit of a hack in order to reuse the student form
-        // this.state.student = {};
+        // This student state is confined to the student component only.
+        this.state = Object.assign({}, store.getState(), { student: {}});
 
         this.showForm = this.showForm.bind(this);
         this.onStudentAdd = this.onStudentAdd.bind(this);

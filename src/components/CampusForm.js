@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import store from '../store';
 
-export default class AddStudentForm extends Component {
+export default class CampusForm extends Component {
     constructor(){
         super();
         this.state = Object.assign({}, store.getState(), {

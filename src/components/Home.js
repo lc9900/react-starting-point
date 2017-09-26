@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 // import StatefulCampusDetail from './StatefulCampusDetail';
 import CampusDetail from './CampusDetail';
-import AddCampusForm from './AddCampusForm';
+import CampusForm from './CampusForm';
 import store, {selectCampus, fetchCampuses, fetchCampusStudents,
                 getCampusStudents, showAddCampusForm, postCampus, deleteCampus} from '../store';
 
@@ -57,6 +57,10 @@ export default class Home extends Component {
             }).catch(err => { throw err; });
     }
 
+    // onCampusChange(){
+
+    // }
+
     render() {
         const {selectedCampusId, campuses, selectedCampusStudents, showAddCampusForm} = this.state;
         return (
@@ -80,7 +84,7 @@ export default class Home extends Component {
                     </ul>
                 </div>
                 {
-                    showAddCampusForm ? <AddCampusForm onCampusAdd={this.onCampusAdd}/> : <div></div>
+                    showAddCampusForm ? <CampusForm onCampusAdd={this.onCampusAdd}/> : <div></div>
                 }
 
                 {
