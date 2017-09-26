@@ -70,11 +70,7 @@ export default class Home extends Component {
     }
 
     onCampusEdit(campusInfoObj){
-        editCampus(campusInfoObj)
-            .then(() => {
-                store.dispatch(fetchCampuses());
-                store.dispatch(selectCampus({}));
-            }).catch(err => { throw err; });
+        editCampus(campusInfoObj);
     }
 
     onCampusChange(campusInfoObj){
