@@ -54,9 +54,7 @@ export default class Home extends Component {
     onCampusAdd(campusInfoObj){
         // store.dispatch(showAddCampusForm(false))
         postCampus(campusInfoObj)
-            .then(() => {
-                store.dispatch(fetchCampuses());
-            }).catch(err => { throw err; });
+
     }
 
     onCampusDelete(campusId, event){

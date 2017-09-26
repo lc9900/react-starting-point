@@ -94,6 +94,14 @@ export function showAddStudentForm(value){
 
 // THUNK
 
+export function postCampus(campusInfoObj) {
+    return axios.post('/api/campus', campusInfoObj)
+                .then(() => {
+                    store.dispatch(fetchCampuses());
+                }).catch(err => { throw err; });
+
+}
+
 export function editCampus(campusInfoObj){
     return axios.put(`/api/campus/${campusInfoObj.id}`, {name: campusInfoObj.name})
                 .then(() => {
@@ -211,10 +219,7 @@ function reducer (state = initialState, action) {
 
 // Side-effects that are NOT THUNKS
 
-export function postCampus(campusInfoObj) {
-    return axios.post('/api/campus', campusInfoObj)
 
-}
 
 export function deleteCampus(campusId){
     return axios.delete(`/api/campus/${campusId}`);
