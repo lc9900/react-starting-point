@@ -16,6 +16,7 @@ const initialState = {
     campuses: [],
     selectedCampusStudents: [],
     students: [],
+    singleCampus: {}
 }
 
 
@@ -27,6 +28,7 @@ const GET_CAMPUS_STUDENTS = 'GET_CAMPUS_STUDENTS';
 const GET_STUDENTS = 'GET_STUDENTS';
 // const ADD_STUDENT = 'ADD_STUDENT';
 const SHOW_ADD_CAMPUS_FORM = 'SHOW_ADD_CAMPUS_FORM';
+const SINGLE_CAMPUS = 'SINGLE_CAMPUS';
 
 
 // ACTION CREATOR
@@ -38,13 +40,12 @@ export function showAddCampusForm(value){
     }
 }
 
-// export function addStudent(student){
-//     // console.log(student);
-//     return {
-//         type: ADD_STUDENT,
-//         student
-//     };
-// }
+export function singleCampus(campus){
+    return {
+        type: SINGLE_CAMPUS,
+        singleCampus: campus
+    }
+}
 
 export function getStudents(students) {
     return {
@@ -99,11 +100,12 @@ export function fetchCampusStudents(campusId) {
     return function(dispatch) {
         return axios.get(`/api/campus/${campusId}`)
                     .then(res => res.data)
-                    .then(students => {
-                        dispatch(getCampusStudents(students));
+                    .then(campus => {
+                        console.log(campus.students);
+                        dispatch(getCampusStudents(campus.students));
                     })
                     .catch(err => { throw err; });
-    }
+    };
 }
 
 export function fetchCampuses(){
@@ -161,8 +163,6 @@ function reducer (state = initialState, action) {
 
 
 // Side-effects that are NOT THUNKS
-
-// This one is not really a thunk
 
 export function editCampus(campusInfoObj){
     return axios.put(`/api/campus/${campusInfoObj.id}`, {name: campusInfoObj.name});

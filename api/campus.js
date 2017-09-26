@@ -1,7 +1,7 @@
 // Route here is /api/campus/
 const router = require('express').Router();
 const db = require('../db/models');
-const {Campus} = db;
+const {Campus, Student} = db;
 module.exports = router;
 
 
@@ -13,6 +13,21 @@ router.get('/', (req, res, next) => {
             })
             .catch(err => { throw err; });
 });
+
+// Tested
+router.get('/:campusId', (req, res) => {
+    console.log(req.params.campusId);
+    return Campus.findOne({
+        where:{
+            id: req.params.campusId*1
+        },
+        include: [Student]
+    })
+    .then(campus => {
+        res.json(campus)
+    }).catch(err => { throw err; });
+})
+
 
 // Tested
 router.delete('/:campusId', (req, res) => {
@@ -47,15 +62,7 @@ router.post('/', (req, res) => {
             .catch(err => { throw err; });
 })
 
-// Tested
-router.get('/:campusId', (req, res) => {
-    return Campus.findById(req.params.campusId)
-                .then(campus => {
-                    return campus.getStudents();
-                }).then(students => {
-                    res.json(students);
-                }).catch(err => { throw err; });
-})
+
 ///////////////////////////////////////////////////////////////
 // Removing student from campus
 // Tested

@@ -3,6 +3,7 @@ import { Route, Switch, Redirect} from 'react-router-dom';
 import Navbar from './Navbar';
 import Home from './Home';
 import Students from './Students';
+import SingleCampus from './SingleCampus';
 
 export default function Main () {
     return (
@@ -12,8 +13,9 @@ export default function Main () {
             </div>
             <main>
                 <Switch>
-                    <Route path='/home' component={Home}/>
+                    <Route exact path='/home' component={Home}/>
                     <Route path='/students' component={Students}/>
+                    <Route path='/home/:campusId' component={SingleCampus}/>
                     <Redirect to='/home' />
                 </Switch>
             </main>
