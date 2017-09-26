@@ -94,6 +94,13 @@ export function showAddStudentForm(value){
 
 // THUNK
 
+export function deleteCampus(campusId){
+    return axios.delete(`/api/campus/${campusId}`)
+                .then(() => {
+                    store.dispatch(fetchCampuses());
+                }).catch(err => { throw err; });
+}
+
 export function postCampus(campusInfoObj) {
     return axios.post('/api/campus', campusInfoObj)
                 .then(() => {
@@ -221,9 +228,7 @@ function reducer (state = initialState, action) {
 
 
 
-export function deleteCampus(campusId){
-    return axios.delete(`/api/campus/${campusId}`);
-}
+
 
 export function deleteStudent(studentId){
     return axios.delete(`/api/student/${studentId}`);
