@@ -115,7 +115,7 @@ export default class Home extends Component {
                 }
 
                 {
-                    selectedCampus.id ? <CampusDetail students={selectedCampusStudents} campus={selectedCampus}/>: <div></div>
+                    selectedCampus.id && !showAddCampusForm ? <CampusDetail students={selectedCampusStudents} campus={selectedCampus}/>: <div></div>
                 }
             </div>
         )
