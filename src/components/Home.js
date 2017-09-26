@@ -44,7 +44,7 @@ export default class Home extends Component {
         // Setting it to false doesn't work
         // The component is NOT unmounted. I bet it's timing again, since
         // this is happening so fast, false, then true.
-        store.dispatch(showAddCampusForm(false));
+        // store.dispatch(showAddCampusForm(false));
 
         if(campus.id) store.dispatch(selectCampus(campus));
         else store.dispatch(selectCampus({}));
@@ -102,7 +102,7 @@ export default class Home extends Component {
                                             <span className="glyphicon glyphicon-remove"></span> Remove
                                         </button>
 
-                                        <button onClick={(event) => this.showForm(campus, event)} type='button' className='btn btn-primary btn-xs pull-right'>
+                                        <button onClick={(event) => this.showForm(campus, event)} type='button' className='btn btn-primary btn-xs pull-right' style={{marginRight:'5px'}}>
                                             <span className="glyphicon glyphicon-pencil"></span> Edit
                                         </button>
                                     </li>

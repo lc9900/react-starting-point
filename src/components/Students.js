@@ -81,23 +81,37 @@ export default class Students extends Component {
             <div className='row'>
                 <div className='col-sm-8'>
                     <h1>Students Page <button className='btn btn-primary pull-right' onClick={this.showForm}>Add Student</button></h1>
-                    <ul className='list-group'>
+                    <table className='table'>
+                        <thead>
+                            <tr>
+                                <th>Student Name</th>
+                                <th>Campus</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
                         {
-                            students.map(student => <li className='list-group-item' key={student.id}>
-                                                        <Link to={`/student/${student.id}`}>{student.name} </Link>
+                            students.map(student => <tr key={student.id}>
+                                                        <td><Link to={`/student/${student.id}`}>{student.name} </Link></td>
+                                                        <td>
                                                         {
-                                                            student.campus ? <span>@ {student.campus.name}</span>:<span></span>
+                                                            student.campus ? <Link to={`/campus/${student.campus.id}`}>{student.campus.name}</Link>
+                                                                            :<span></span>
                                                         }
-                                                        <button onClick={() => this.onStudentDelete(student.id)} type='button' className='btn btn-danger btn-xs pull-right'>
-                                                            <span className="glyphicon glyphicon-remove"></span> Remove
-                                                        </button>
-                                                        <button onClick={() => this.showForm(student)} type='button' className='btn btn-primary btn-xs pull-right'>
-                                                            <span className="glyphicon glyphicon-pencil"></span> Edit
-                                                        </button>
-                                                    </li>
+                                                        </td>
+                                                        <td>
+                                                            <button onClick={() => this.showForm(student)} type='button' className='btn btn-primary btn-xs' style={{marginRight:'5px'}}>
+                                                                <span className="glyphicon glyphicon-pencil"></span> Edit
+                                                            </button>
+                                                            <button onClick={() => this.onStudentDelete(student.id)} type='button' className='btn btn-danger btn-xs'>
+                                                                <span className="glyphicon glyphicon-remove"></span> Remove
+                                                            </button>
+                                                        </td>
+                                                    </tr>
                                         )
                         }
-                    </ul>
+                        </tbody>
+                    </table>
                 </div>
                 {
                     showAddStudentForm ? <StudentForm onStudentChange={this.onStudentChange} student={student}/>:<div></div>
