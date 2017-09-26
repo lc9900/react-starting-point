@@ -2,17 +2,21 @@ import React, {Component} from 'react';
 // import StatefulCampusDetail from './StatefulCampusDetail';
 import CampusDetail from './CampusDetail';
 import CampusForm from './CampusForm';
-import store, {selectCampus, fetchCampuses, fetchCampusStudents,
-                getCampusStudents, showAddCampusForm, postCampus, deleteCampus} from '../store';
+import store, { selectCampus, fetchCampuses, fetchCampusStudents,
+                getCampusStudents, showAddCampusForm,
+                postCampus, deleteCampus, editCampus } from '../store';
 
 export default class Home extends Component {
     constructor() {
         super();
         this.state = store.getState();
+
         this.displayDetail = this.displayDetail.bind(this);
         this.showForm = this.showForm.bind(this);
         this.onCampusAdd = this.onCampusAdd.bind(this);
         this.onCampusDelete = this.onCampusDelete.bind(this);
+        this.onCampusEdit = this.onCampusEdit.bind(this);
+        this.onCampusChange = this.onCampusChange.bind(this);
     }
 
     componentDidMount() {
@@ -22,29 +26,36 @@ export default class Home extends Component {
     }
 
     componentWillUnmount() {
-        store.dispatch(selectCampus(0));
+        store.dispatch(selectCampus({}));
         store.dispatch(getCampusStudents([]));
         store.dispatch(showAddCampusForm(false));
         this.unsubscribe();
     }
 
-    displayDetail(campusId){
-        store.dispatch(selectCampus(campusId));
-        store.dispatch(fetchCampusStudents(campusId));
+    displayDetail(campus){
+        store.dispatch(selectCampus(campus));
+        store.dispatch(fetchCampusStudents(campus.id));
         store.dispatch(showAddCampusForm(false));
     }
 
-    showForm() {
-        store.dispatch(selectCampus(0));
+    showForm(campus, event) {
+        event.stopPropagation();
+        // Setting it to false doesn't work
+        // The component is NOT unmounted. I bet it's timing again, since
+        // this is happening so fast, false, then true.
+        store.dispatch(showAddCampusForm(false));
+
+        if(campus.id) store.dispatch(selectCampus(campus));
+        else store.dispatch(selectCampus({}));
         store.dispatch(showAddCampusForm(true));
     }
 
     onCampusAdd(campusInfoObj){
+        // store.dispatch(showAddCampusForm(false))
         postCampus(campusInfoObj)
             .then(() => {
                 store.dispatch(fetchCampuses());
             }).catch(err => { throw err; });
-
     }
 
     onCampusDelete(campusId, event){
@@ -57,12 +68,24 @@ export default class Home extends Component {
             }).catch(err => { throw err; });
     }
 
-    // onCampusChange(){
+    onCampusEdit(campusInfoObj){
+        editCampus(campusInfoObj)
+            .then(() => {
+                store.dispatch(fetchCampuses());
+                store.dispatch(selectCampus({}));
+            }).catch(err => { throw err; });
+    }
 
-    // }
+    onCampusChange(campusInfoObj){
+        store.dispatch(showAddCampusForm(false));
+
+        if(this.state.selectedCampus.id > 0) this.onCampusEdit(campusInfoObj);
+        else this.onCampusAdd(campusInfoObj);
+
+    }
 
     render() {
-        const {selectedCampusId, campuses, selectedCampusStudents, showAddCampusForm} = this.state;
+        const {selectedCampus, campuses, selectedCampusStudents, showAddCampusForm} = this.state;
         return (
             <div className='row'>
                 <div className='col-sm-8'>
@@ -71,11 +94,15 @@ export default class Home extends Component {
                         {
                             campuses.map(campus => {
                                 return (
-                                    <li className='list-group-item' key={campus.id} onClick={()=>this.displayDetail(campus.id)}>
+                                    <li className='list-group-item' key={campus.id} onClick={()=>this.displayDetail(campus)}>
                                         <span>{campus.name}</span>
 
                                         <button onClick={(event) => this.onCampusDelete(campus.id, event)} type='button' className='btn btn-danger btn-xs pull-right'>
                                             <span className="glyphicon glyphicon-remove"></span> Remove
+                                        </button>
+
+                                        <button onClick={(event) => this.showForm(campus, event)} type='button' className='btn btn-primary btn-xs pull-right'>
+                                            <span className="glyphicon glyphicon-pencil"></span> Edit
                                         </button>
                                     </li>
                                 )
@@ -84,11 +111,11 @@ export default class Home extends Component {
                     </ul>
                 </div>
                 {
-                    showAddCampusForm ? <CampusForm onCampusAdd={this.onCampusAdd}/> : <div></div>
+                    showAddCampusForm ? <CampusForm onCampusChange={this.onCampusChange} campus={selectedCampus}/> : <div></div>
                 }
 
                 {
-                    selectedCampusId > 0 ? <CampusDetail students={selectedCampusStudents}/>: <div></div>
+                    selectedCampus.id ? <CampusDetail students={selectedCampusStudents} campus={selectedCampus}/>: <div></div>
                 }
             </div>
         )

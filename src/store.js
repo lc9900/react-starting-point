@@ -10,7 +10,7 @@ import axios from 'axios';
 
 // INITIAL STATE
 const initialState = {
-    selectedCampusId: 0,
+    selectedCampus: {},
     showAddStudentForm: false,
     showAddCampusForm: false,
     campuses: [],
@@ -67,10 +67,10 @@ export function getCampuses(campuses) {
     };
 }
 
-export function selectCampus(campusId){
+export function selectCampus(campus){
     return {
         type: SELECT_CAMPUS,
-        selectedCampusId: campusId
+        selectedCampus: campus
     };
 }
 
@@ -123,7 +123,7 @@ function reducer (state = initialState, action) {
     switch (action.type) {
         case SELECT_CAMPUS:
             return Object.assign({}, state, {
-                selectedCampusId: action.selectedCampusId
+                selectedCampus: action.selectedCampus
             });
 
         case SHOW_ADD_STUDENT_FORM:
@@ -163,8 +163,9 @@ function reducer (state = initialState, action) {
 // Side-effects that are NOT THUNKS
 
 // This one is not really a thunk
-export function deleteStudent(studentId){
-    return axios.delete(`/api/student/${studentId}`);
+
+export function editCampus(campusInfoObj){
+    return axios.put(`/api/campus/${campusInfoObj.id}`, {name: campusInfoObj.name});
 }
 
 export function postCampus(campusInfoObj) {
@@ -173,6 +174,10 @@ export function postCampus(campusInfoObj) {
 
 export function deleteCampus(campusId){
     return axios.delete(`/api/campus/${campusId}`);
+}
+
+export function deleteStudent(studentId){
+    return axios.delete(`/api/student/${studentId}`);
 }
 
 export function postStudent(studentInfoObj){
@@ -185,7 +190,6 @@ export function editStudent(studentInfoObj){
         name: studentInfoObj.name,
         campusId: studentInfoObj.campusId
     });
-
 }
 
 // CREATE STORE
