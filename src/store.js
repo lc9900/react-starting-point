@@ -16,7 +16,8 @@ const initialState = {
     campuses: [],
     selectedCampusStudents: [],
     students: [],
-    singleCampus: {}
+    singleCampus: {},
+    singleStudent: {}
 }
 
 
@@ -29,9 +30,17 @@ const GET_STUDENTS = 'GET_STUDENTS';
 // const ADD_STUDENT = 'ADD_STUDENT';
 const SHOW_ADD_CAMPUS_FORM = 'SHOW_ADD_CAMPUS_FORM';
 const SINGLE_CAMPUS = 'SINGLE_CAMPUS';
+const SINGLE_STUDENT = 'SINGLE_STUDENT';
 
 
 // ACTION CREATOR
+
+export function singleStudent(student){
+    return {
+        type: SINGLE_STUDENT,
+        student
+    }
+}
 
 export function showAddCampusForm(value){
     return {
@@ -43,7 +52,7 @@ export function showAddCampusForm(value){
 export function singleCampus(campus){
     return {
         type: SINGLE_CAMPUS,
-        singleCampus: campus
+        campus // includes students as well
     }
 }
 
@@ -84,6 +93,26 @@ export function showAddStudentForm(value){
 
 
 // THUNK
+
+export function fetchSingleStudent(studentId){
+    return function(dispatch){
+        return axios.get(`/api/student/${studentId}`)
+                .then(res => res.data)
+                .then(student => {
+                    dispatch(singleStudent(student));
+                });
+    }
+}
+
+export function fetchSingleCampus(campusId){
+    return function(dispatch){
+        return axios.get(`/api/campus/${campusId}`)
+                .then(res => res.data)
+                .then(campus => {
+                    dispatch(singleCampus(campus));
+                });
+    }
+}
 
 export function fetchStudents(){
     return function(dispatch) {
@@ -148,6 +177,16 @@ function reducer (state = initialState, action) {
                 students: action.students
             });
 
+        case SINGLE_CAMPUS:
+            return Object.assign({}, state, {
+                singleCampus: action.campus
+            });
+
+        case SINGLE_STUDENT:
+            console.log('SINGLE_STUDENT ', action.student)
+            return Object.assign({}, state, {
+                singleStudent: action.student
+            });
         // case ADD_STUDENT:
         //     let students = state.students.concat(action.student);
         //     // console.log(students);

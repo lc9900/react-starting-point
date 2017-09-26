@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Link} from 'react-router-dom';
 // import StatefulCampusDetail from './StatefulCampusDetail';
 import CampusDetail from './CampusDetail';
 import CampusForm from './CampusForm';
@@ -94,8 +95,8 @@ export default class Home extends Component {
                         {
                             campuses.map(campus => {
                                 return (
-                                    <li className='list-group-item' key={campus.id} onClick={()=>this.displayDetail(campus)}>
-                                        <span>{campus.name}</span>
+                                    <li className='list-group-item' key={campus.id}>
+                                        <Link to={`/campus/${campus.id}`}>{campus.name}</Link>
 
                                         <button onClick={(event) => this.onCampusDelete(campus.id, event)} type='button' className='btn btn-danger btn-xs pull-right'>
                                             <span className="glyphicon glyphicon-remove"></span> Remove

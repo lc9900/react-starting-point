@@ -1,7 +1,7 @@
 // Route here is /api/student
 const router = require('express').Router();
 const db = require('../db/models');
-const {Student} = db;
+const {Campus, Student} = db;
 module.exports = router;
 
 // Retrieve all students info
@@ -13,6 +13,16 @@ router.get('/', (req, res) => {
             .catch(err => { throw err; });
 });
 
+router.get('/:studentId', (req, res) => {
+    return Student.findOne({
+        where: {
+            id: req.params.studentId * 1
+        },
+        include: [Campus]
+    }).then(student => {
+        res.json(student);
+    }).catch(err => { throw err; });
+})
 // Expected req.body to be {name: xxxxxx, campusId: xx}
 // Add new student
 // Tested

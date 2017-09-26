@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Link} from 'react-router-dom';
 import StudentForm from './StudentForm';
 import store, { showAddStudentForm, getStudents, fetchStudents,
                 fetchCampuses, postStudent, deleteStudent, editStudent } from '../store';
@@ -83,7 +84,10 @@ export default class Students extends Component {
                     <ul className='list-group'>
                         {
                             students.map(student => <li className='list-group-item' key={student.id}>
-                                                        {student.name}
+                                                        <Link to={`/student/${student.id}`}>{student.name} </Link>
+                                                        {
+                                                            student.campus ? <span>@ {student.campus.name}</span>:<span></span>
+                                                        }
                                                         <button onClick={() => this.onStudentDelete(student.id)} type='button' className='btn btn-danger btn-xs pull-right'>
                                                             <span className="glyphicon glyphicon-remove"></span> Remove
                                                         </button>

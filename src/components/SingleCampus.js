@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import store, { fetchCampusStudents } from '../store';
+import store, { fetchSingleCampus } from '../store';
+import {Link} from 'react-router-dom';
 
 export default class SingleCampus extends Component {
     constructor(){
@@ -17,7 +18,7 @@ export default class SingleCampus extends Component {
     componentDidMount(){
         const campusId = this.props.match.params.campusId;
         this.setState({campusId});
-        store.dispatch(fetchCampusStudents(campusId));
+        store.dispatch(fetchSingleCampus(campusId));
 
         this.unsubscribe = store.subscribe(() => this.setState(store.getState));
     }
@@ -27,9 +28,27 @@ export default class SingleCampus extends Component {
     }
 
     render(){
+        const {singleCampus} = this.state;
+        const students = singleCampus.students;
+        console.log(singleCampus);
         return (
-            <h1>Single Campus for {this.state.campusId}</h1>
-        );
+            <div className='col-sm-6'>
+                <div className="panel panel-default">
+                  <div className="panel-body">
+                  <p className='lead'>{singleCampus.name}</p>
+                    <ul className='list-group'>
+                        {
+                            singleCampus.id && students.length > 0 ? students.map(student => <li key={student.id} className='list-group-item'>
+                                        <Link to={`/student/${student.id}`}>{student.name}</Link>
+                                    </li>)
+                                        : <div className='lead'>No students for {singleCampus.name}</div>
+                        }
+                    </ul>
+                  </div>
+                </div>
+            </div>
+        )
+
     }
 }
 
