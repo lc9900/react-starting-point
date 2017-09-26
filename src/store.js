@@ -180,10 +180,10 @@ export function postStudent(studentInfoObj){
 
 }
 
-export function editStudent(student){
-    return axios.put(`/api/student/${student.id}`, {
-        name: student.name,
-        campusId: student.campusId
+export function editStudent(studentInfoObj){
+    return axios.put(`/api/student/${studentInfoObj.id}`, {
+        name: studentInfoObj.name,
+        campusId: studentInfoObj.campusId
     });
 
 }

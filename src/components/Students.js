@@ -1,19 +1,21 @@
 import React, {Component} from 'react';
 import StudentForm from './StudentForm';
-import store, { showAddStudentForm, getStudents, fetchStudents, fetchCampuses, postStudent, deleteStudent } from '../store';
+import store, { showAddStudentForm, getStudents, fetchStudents,
+                fetchCampuses, postStudent, deleteStudent, editStudent } from '../store';
 
 export default class Students extends Component {
     constructor() {
         super();
-        this.state = store.getState();
+        this.state = Object.assign({}, store.getState(), { student: {}});
 
         // This is a bit of a hack in order to reuse the student form
-        this.state.student = {};
+        // this.state.student = {};
 
         this.showForm = this.showForm.bind(this);
         this.onStudentAdd = this.onStudentAdd.bind(this);
         this.onStudentDelete = this.onStudentDelete.bind(this);
-        this.onStudentEdit = this.onStudentEdit.bind(this)
+        this.onStudentEdit = this.onStudentEdit.bind(this);
+        this.onStudentChange = this.onStudentChange.bind(this);
     }
 
     componentDidMount () {
@@ -28,12 +30,19 @@ export default class Students extends Component {
         this.unsubscribe();
     }
 
-    showForm() {
+    showForm(student) {
+        if (student.id){
+            // console.log("showForm with student", student);
+            this.setState({ student });
+        }
+        else {
+            this.setState({student: {}}); // Resetting student when we adding students
+        }
         store.dispatch(showAddStudentForm(true));
     }
 
     onStudentAdd(studentInfoObj){
-        // console.log(studentInfoObj);
+        store.dispatch(showAddStudentForm(false));
         postStudent(studentInfoObj)
             .then(() => {
                 store.dispatch(fetchStudents());
@@ -49,12 +58,25 @@ export default class Students extends Component {
             .catch(err => { throw err; });
     }
 
-    onStudentEdit(student){
-        this.setState({student});
+    onStudentEdit(studentInfoObj){
+        store.dispatch(showAddStudentForm(false));
+        editStudent(studentInfoObj)
+            .then(() => {
+                store.dispatch(fetchStudents());
+            })
+            .catch(err => {throw err; });
+    }
+
+    onStudentChange(studentInfoObj){
+        if (studentInfoObj.id) return this.onStudentEdit(studentInfoObj);
+
+        return this.onStudentAdd(studentInfoObj);
     }
 
     render() {
-        const {showAddStudentForm, students} = this.state;
+        const {showAddStudentForm, students, student} = this.state;
+        // console.log("Students state ", this.state);
+        // console.log('Students render student ', student);
         return (
             <div className='row'>
                 <div className='col-sm-8'>
@@ -63,11 +85,11 @@ export default class Students extends Component {
                         {
                             students.map(student => <li className='list-group-item' key={student.id}>
                                                         {student.name}
-                                                        <button onClick={() => this.onStudentEdit(student)} type='button' className='btn btn-primary btn-xs pull-right'>
-                                                            <span className="glyphicon glyphicon-remove"></span> Remove
-                                                        </button>
                                                         <button onClick={() => this.onStudentDelete(student.id)} type='button' className='btn btn-danger btn-xs pull-right'>
                                                             <span className="glyphicon glyphicon-remove"></span> Remove
+                                                        </button>
+                                                        <button onClick={() => this.showForm(student)} type='button' className='btn btn-primary btn-xs pull-right'>
+                                                            <span className="glyphicon glyphicon-pencil"></span> Edit
                                                         </button>
                                                     </li>
                                         )
@@ -75,7 +97,7 @@ export default class Students extends Component {
                     </ul>
                 </div>
                 {
-                    showAddStudentForm ? <StudentForm onStudentAdd={this.onStudentAdd}/>:<div></div>
+                    showAddStudentForm ? <StudentForm onStudentChange={this.onStudentChange} student={student}/>:<div></div>
                 }
             </div>
         );
