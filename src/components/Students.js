@@ -59,12 +59,7 @@ export default class Students extends Component {
     }
 
     onStudentEdit(studentInfoObj){
-        store.dispatch(showAddStudentForm(false));
-        editStudent(studentInfoObj)
-            .then(() => {
-                store.dispatch(fetchStudents());
-            })
-            .catch(err => {throw err; });
+        editStudent(studentInfoObj);
     }
 
     onStudentChange(studentInfoObj){

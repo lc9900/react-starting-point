@@ -240,10 +240,14 @@ export function postStudent(studentInfoObj){
 }
 
 export function editStudent(studentInfoObj){
+    store.dispatch(showAddStudentForm(false));
     return axios.put(`/api/student/${studentInfoObj.id}`, {
         name: studentInfoObj.name,
         campusId: studentInfoObj.campusId
-    });
+    }).then(() => {
+                store.dispatch(fetchStudents());
+            })
+            .catch(err => {throw err; });
 }
 
 // CREATE STORE
