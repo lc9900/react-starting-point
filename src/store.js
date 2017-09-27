@@ -123,6 +123,8 @@ export function editStudent(studentInfoObj){
 }
 
 export function deleteCampus(campusId){
+    store.dispatch(showAddCampusForm(false));
+    store.dispatch(selectCampus(0));
     return axios.delete(`/api/campus/${campusId}`)
                 .then(() => {
                     store.dispatch(fetchCampuses());

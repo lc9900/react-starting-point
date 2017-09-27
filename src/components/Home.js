@@ -58,10 +58,7 @@ export default class Home extends Component {
 
     onCampusDelete(campusId, event){
         event.stopPropagation();
-        store.dispatch(showAddCampusForm(false));
-        store.dispatch(selectCampus(0));
-        deleteCampus(campusId)
-
+        deleteCampus(campusId);
     }
 
     onCampusEdit(campusInfoObj){
@@ -70,10 +67,8 @@ export default class Home extends Component {
 
     onCampusChange(campusInfoObj){
         store.dispatch(showAddCampusForm(false));
-
         if(this.state.selectedCampus.id > 0) this.onCampusEdit(campusInfoObj);
         else this.onCampusAdd(campusInfoObj);
-
     }
 
     render() {

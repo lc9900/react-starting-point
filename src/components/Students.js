@@ -55,7 +55,6 @@ export default class Students extends Component {
 
     onStudentChange(studentInfoObj){
         if (studentInfoObj.id) return this.onStudentEdit(studentInfoObj);
-
         return this.onStudentAdd(studentInfoObj);
     }
 
