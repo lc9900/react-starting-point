@@ -42,20 +42,11 @@ export default class Students extends Component {
     }
 
     onStudentAdd(studentInfoObj){
-        store.dispatch(showAddStudentForm(false));
         postStudent(studentInfoObj)
-            .then(() => {
-                store.dispatch(fetchStudents());
-            }).catch(err => { throw err; });
     }
 
     onStudentDelete(studentId){
-        store.dispatch(showAddStudentForm(false));
-        deleteStudent(studentId)
-            .then(() => {
-                store.dispatch(fetchStudents());
-            })
-            .catch(err => { throw err; });
+        deleteStudent(studentId);
     }
 
     onStudentEdit(studentInfoObj){

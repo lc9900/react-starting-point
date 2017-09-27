@@ -94,6 +94,34 @@ export function showAddStudentForm(value){
 
 // THUNK
 
+export function postStudent(studentInfoObj){
+    store.dispatch(showAddStudentForm(false));
+    return axios.post('/api/student', studentInfoObj)
+                .then(() => {
+                    store.dispatch(fetchStudents());
+                }).catch(err => { throw err; });
+}
+
+export function deleteStudent(studentId){
+    store.dispatch(showAddStudentForm(false));
+    return axios.delete(`/api/student/${studentId}`)
+                .then(() => {
+                    store.dispatch(fetchStudents());
+                })
+                .catch(err => { throw err; });
+}
+
+export function editStudent(studentInfoObj){
+    store.dispatch(showAddStudentForm(false));
+    return axios.put(`/api/student/${studentInfoObj.id}`, {
+        name: studentInfoObj.name,
+        campusId: studentInfoObj.campusId
+    }).then(() => {
+                store.dispatch(fetchStudents());
+            })
+            .catch(err => {throw err; });
+}
+
 export function deleteCampus(campusId){
     return axios.delete(`/api/campus/${campusId}`)
                 .then(() => {
@@ -221,33 +249,6 @@ function reducer (state = initialState, action) {
         default:
             return state;
     }
-}
-
-
-// Side-effects that are NOT THUNKS
-
-
-
-
-
-export function deleteStudent(studentId){
-    return axios.delete(`/api/student/${studentId}`);
-}
-
-export function postStudent(studentInfoObj){
-    return axios.post('/api/student', studentInfoObj);
-
-}
-
-export function editStudent(studentInfoObj){
-    store.dispatch(showAddStudentForm(false));
-    return axios.put(`/api/student/${studentInfoObj.id}`, {
-        name: studentInfoObj.name,
-        campusId: studentInfoObj.campusId
-    }).then(() => {
-                store.dispatch(fetchStudents());
-            })
-            .catch(err => {throw err; });
 }
 
 // CREATE STORE
