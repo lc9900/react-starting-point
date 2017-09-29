@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 // import StatefulCampusDetail from './StatefulCampusDetail';
-import CampusDetail from './CampusDetail';
+// import CampusDetail from './CampusDetail';
 import CampusForm from './CampusForm';
 import store, { selectCampus, fetchCampuses, fetchCampusStudents,
                 getCampusStudents, showAddCampusForm,
@@ -12,7 +12,7 @@ export default class Home extends Component {
         super();
         this.state = store.getState();
 
-        this.displayDetail = this.displayDetail.bind(this);
+        // this.displayDetail = this.displayDetail.bind(this);
         this.showForm = this.showForm.bind(this);
         this.onCampusAdd = this.onCampusAdd.bind(this);
         this.onCampusDelete = this.onCampusDelete.bind(this);
@@ -33,11 +33,11 @@ export default class Home extends Component {
         this.unsubscribe();
     }
 
-    displayDetail(campus){
-        store.dispatch(selectCampus(campus));
-        store.dispatch(fetchCampusStudents(campus.id));
-        store.dispatch(showAddCampusForm(false));
-    }
+    // displayDetail(campus){
+    //     store.dispatch(selectCampus(campus));
+    //     store.dispatch(fetchCampusStudents(campus.id));
+    //     store.dispatch(showAddCampusForm(false));
+    // }
 
     showForm(campus, event) {
         event.stopPropagation();
@@ -99,10 +99,6 @@ export default class Home extends Component {
                 </div>
                 {
                     showAddCampusForm ? <CampusForm onCampusChange={this.onCampusChange} campus={selectedCampus}/> : <div></div>
-                }
-
-                {
-                    selectedCampus.id && !showAddCampusForm ? <CampusDetail students={selectedCampusStudents} campus={selectedCampus}/>: <div></div>
                 }
             </div>
         )
